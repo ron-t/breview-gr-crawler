@@ -1,0 +1,867 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GoodReadsCrawlerModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="GoodReadsCrawlerModelStoreContainer">
+          <EntitySet Name="Activity" EntityType="GoodReadsCrawlerModel.Store.Activity" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Author" EntityType="GoodReadsCrawlerModel.Store.Author" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Book" EntityType="GoodReadsCrawlerModel.Store.Book" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Friendship" EntityType="GoodReadsCrawlerModel.Store.Friendship" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Genre" EntityType="GoodReadsCrawlerModel.Store.Genre" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Group" EntityType="GoodReadsCrawlerModel.Store.Group" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GroupMember" EntityType="GoodReadsCrawlerModel.Store.GroupMember" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="List" EntityType="GoodReadsCrawlerModel.Store.List" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ListVote" EntityType="GoodReadsCrawlerModel.Store.ListVote" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ReadingChallenge" EntityType="GoodReadsCrawlerModel.Store.ReadingChallenge" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Review" EntityType="GoodReadsCrawlerModel.Store.Review" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="User" EntityType="GoodReadsCrawlerModel.Store.User" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Activity_User" Association="GoodReadsCrawlerModel.Store.FK_Activity_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Book_Author" Association="GoodReadsCrawlerModel.Store.FK_Book_Author">
+            <End Role="Author" EntitySet="Author" />
+            <End Role="Book" EntitySet="Book" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friendship_User" Association="GoodReadsCrawlerModel.Store.FK_Friendship_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Genre_User" Association="GoodReadsCrawlerModel.Store.FK_Genre_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Genre" EntitySet="Genre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMember_Group" Association="GoodReadsCrawlerModel.Store.FK_GroupMember_Group">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="GroupMember" EntitySet="GroupMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMember_User" Association="GoodReadsCrawlerModel.Store.FK_GroupMember_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="GroupMember" EntitySet="GroupMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListVote_List" Association="GoodReadsCrawlerModel.Store.FK_ListVote_List">
+            <End Role="List" EntitySet="List" />
+            <End Role="ListVote" EntitySet="ListVote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListVote_User" Association="GoodReadsCrawlerModel.Store.FK_ListVote_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="ListVote" EntitySet="ListVote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReadingChallenge_User" Association="GoodReadsCrawlerModel.Store.FK_ReadingChallenge_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="ReadingChallenge" EntitySet="ReadingChallenge" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Review_Book" Association="GoodReadsCrawlerModel.Store.FK_Review_Book">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="Review" EntitySet="Review" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Review_User" Association="GoodReadsCrawlerModel.Store.FK_Review_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Review" EntitySet="Review" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="retrievedAt" />
+          </Key>
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="activityTimestampString" Type="varchar" MaxLength="256" />
+          <Property Name="activityHTML" Type="varchar(max)" />
+          <Property Name="retrievedAt" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="title" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="isProcessed" Type="bit" Nullable="false" />
+          <Property Name="isbn" Type="varchar" MaxLength="50" />
+          <Property Name="authorId" Type="int" />
+          <Property Name="numRatings" Type="int" />
+          <Property Name="numTextReviews" Type="int" />
+          <Property Name="avgRating" Type="numeric" Precision="5" Scale="2" />
+          <Property Name="ratingDist" Type="varchar" MaxLength="256" />
+          <Property Name="lastUpdated" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Friendship">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="friendIdString" />
+          </Key>
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="friendIdString" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="friendNumBooks" Type="int" />
+          <Property Name="friendNumFriends" Type="int" />
+          <Property Name="rel" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="name" />
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="userId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="userCount" Type="int" />
+          <Property Name="title" Type="varchar" MaxLength="256" />
+          <Property Name="lastActivityAtString" Type="varchar" MaxLength="256" />
+          <Property Name="description" Type="varchar(max)" />
+          <Property Name="category" Type="varchar" MaxLength="256" />
+          <Property Name="subcategory" Type="varchar" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="GroupMember">
+          <Key>
+            <PropertyRef Name="groupId" />
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="groupId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="List">
+          <Key>
+            <PropertyRef Name="title" />
+          </Key>
+          <Property Name="title" Type="varchar" Nullable="false" MaxLength="512" />
+          <Property Name="numBooks" Type="int" />
+          <Property Name="numVoters" Type="int" />
+        </EntityType>
+        <EntityType Name="ListVote">
+          <Key>
+            <PropertyRef Name="title" />
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="title" Type="varchar" Nullable="false" MaxLength="512" />
+          <Property Name="userId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReadingChallenge">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="challenge" />
+          </Key>
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="challenge" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="numBooksTarget" Type="int" />
+          <Property Name="numBooksRead" Type="int" />
+          <Property Name="Percentage" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="lastUpdated" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Review">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="bookId" Type="int" Nullable="false" />
+          <Property Name="foundOnPage" Type="int" />
+          <Property Name="maxPage" Type="int" />
+          <Property Name="userId" Type="int" />
+          <Property Name="userIdString" Type="varchar" MaxLength="256" />
+          <Property Name="reviewContent" Type="varchar(max)" />
+          <Property Name="starRating" Type="smallint" />
+          <Property Name="publishDate" Type="date" />
+          <Property Name="recommendedFor" Type="varchar(max)" />
+          <Property Name="numComments" Type="int" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="userIdString" Type="varchar" Nullable="false" MaxLength="256" />
+          <Property Name="name" Type="varchar" MaxLength="256" />
+          <Property Name="numRatings" Type="int" />
+          <Property Name="numReviews" Type="int" />
+          <Property Name="numFriends" Type="int" />
+          <Property Name="gender" Type="nvarchar" MaxLength="10" />
+          <Property Name="IsLibrarian" Type="bit" />
+          <Property Name="badge1" Type="nvarchar" MaxLength="255" />
+          <Property Name="badge2" Type="nvarchar" MaxLength="255" />
+          <Property Name="badge3" Type="nvarchar" MaxLength="255" />
+          <Property Name="badge4" Type="nvarchar" MaxLength="255" />
+          <Property Name="badge5" Type="nvarchar" MaxLength="255" />
+          <Property Name="avgRating" Type="decimal" Scale="2" />
+          <Property Name="numGroups" Type="int" />
+          <Property Name="quizNumQuestions" Type="int" />
+          <Property Name="quizNumCorrect" Type="int" />
+          <Property Name="quizRank" Type="int" />
+          <Property Name="quizRankOutOf" Type="int" />
+          <Property Name="numFavouriteAuthors" Type="int" />
+          <Property Name="numFollowers" Type="int" />
+          <Property Name="numUserIsFollowing" Type="int" />
+          <Property Name="numShelves" Type="int" />
+          <Property Name="IsAuthor" Type="bit" />
+          <Property Name="authorUrl" Type="varchar" MaxLength="1000" />
+          <Property Name="IsPrivate" Type="bit" />
+          <Property Name="whenReviewsAdded" Type="datetime" />
+          <Property Name="lastUpdated" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Activity_User">
+          <End Role="User" Type="GoodReadsCrawlerModel.Store.User" Multiplicity="1" />
+          <End Role="Activity" Type="GoodReadsCrawlerModel.Store.Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Book_Author">
+          <End Role="Author" Type="GoodReadsCrawlerModel.Store.Author" Multiplicity="0..1" />
+          <End Role="Book" Type="GoodReadsCrawlerModel.Store.Book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Author">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Book">
+              <PropertyRef Name="authorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friendship_User">
+          <End Role="User" Type="GoodReadsCrawlerModel.Store.User" Multiplicity="1" />
+          <End Role="Friendship" Type="GoodReadsCrawlerModel.Store.Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Genre_User">
+          <End Role="User" Type="GoodReadsCrawlerModel.Store.User" Multiplicity="1" />
+          <End Role="Genre" Type="GoodReadsCrawlerModel.Store.Genre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Genre">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMember_Group">
+          <End Role="Group" Type="GoodReadsCrawlerModel.Store.Group" Multiplicity="1" />
+          <End Role="GroupMember" Type="GoodReadsCrawlerModel.Store.GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="groupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMember_User">
+          <End Role="User" Type="GoodReadsCrawlerModel.Store.User" Multiplicity="1" />
+          <End Role="GroupMember" Type="GoodReadsCrawlerModel.Store.GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListVote_List">
+          <End Role="List" Type="GoodReadsCrawlerModel.Store.List" Multiplicity="1" />
+          <End Role="ListVote" Type="GoodReadsCrawlerModel.Store.ListVote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="List">
+              <PropertyRef Name="title" />
+            </Principal>
+            <Dependent Role="ListVote">
+              <PropertyRef Name="title" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListVote_User">
+          <End Role="User" Type="GoodReadsCrawlerModel.Store.User" Multiplicity="1" />
+          <End Role="ListVote" Type="GoodReadsCrawlerModel.Store.ListVote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ListVote">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReadingChallenge_User">
+          <End Role="User" Type="GoodReadsCrawlerModel.Store.User" Multiplicity="1" />
+          <End Role="ReadingChallenge" Type="GoodReadsCrawlerModel.Store.ReadingChallenge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReadingChallenge">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Review_Book">
+          <End Role="Book" Type="GoodReadsCrawlerModel.Store.Book" Multiplicity="1" />
+          <End Role="Review" Type="GoodReadsCrawlerModel.Store.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="bookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Review_User">
+          <End Role="User" Type="GoodReadsCrawlerModel.Store.User" Multiplicity="0..1" />
+          <End Role="Review" Type="GoodReadsCrawlerModel.Store.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GoodReadsCrawlerModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="GoodReadsCrawlerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Authors" EntityType="GoodReadsCrawlerModel.Author" />
+          <EntitySet Name="Books" EntityType="GoodReadsCrawlerModel.Book" />
+          <EntitySet Name="Reviews" EntityType="GoodReadsCrawlerModel.Review" />
+          <AssociationSet Name="FK_Review_Book" Association="GoodReadsCrawlerModel.FK_Review_Book">
+            <End Role="Book" EntitySet="Books" />
+            <End Role="Review" EntitySet="Reviews" />
+          </AssociationSet>
+          <EntitySet Name="Users" EntityType="GoodReadsCrawlerModel.User" />
+          <AssociationSet Name="FK_Review_User" Association="GoodReadsCrawlerModel.FK_Review_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Review" EntitySet="Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Book_Author" Association="GoodReadsCrawlerModel.FK_Book_Author">
+            <End Role="Author" EntitySet="Authors" />
+            <End Role="Book" EntitySet="Books" />
+          </AssociationSet>
+          <EntitySet Name="Friendships" EntityType="GoodReadsCrawlerModel.Friendship" />
+          <AssociationSet Name="FK_Friendship_User" Association="GoodReadsCrawlerModel.FK_Friendship_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Friendship" EntitySet="Friendships" />
+          </AssociationSet>
+          <EntitySet Name="Activities" EntityType="GoodReadsCrawlerModel.Activity" />
+          <EntitySet Name="Genres" EntityType="GoodReadsCrawlerModel.Genre" />
+          <EntitySet Name="Groups" EntityType="GoodReadsCrawlerModel.Group" />
+          <EntitySet Name="Lists" EntityType="GoodReadsCrawlerModel.List" />
+          <EntitySet Name="ReadingChallenges" EntityType="GoodReadsCrawlerModel.ReadingChallenge" />
+          <AssociationSet Name="FK_Activity_User" Association="GoodReadsCrawlerModel.FK_Activity_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Activity" EntitySet="Activities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Genre_User" Association="GoodReadsCrawlerModel.FK_Genre_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Genre" EntitySet="Genres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReadingChallenge_User" Association="GoodReadsCrawlerModel.FK_ReadingChallenge_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ReadingChallenge" EntitySet="ReadingChallenges" />
+          </AssociationSet>
+          <AssociationSet Name="GroupMember" Association="GoodReadsCrawlerModel.GroupMember">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="ListVote" Association="GoodReadsCrawlerModel.ListVote">
+            <End Role="List" EntitySet="Lists" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Books" Relationship="GoodReadsCrawlerModel.FK_Book_Author" FromRole="Author" ToRole="Book" />
+        </EntityType>
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Reviews" Relationship="GoodReadsCrawlerModel.FK_Review_Book" FromRole="Book" ToRole="Review" />
+          <Property Type="Boolean" Name="isProcessed" Nullable="false" />
+          <Property Type="String" Name="isbn" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="authorId" />
+          <NavigationProperty Name="Author" Relationship="GoodReadsCrawlerModel.FK_Book_Author" FromRole="Book" ToRole="Author" />
+          <Property Type="Decimal" Name="avgRating" Precision="5" Scale="2" />
+          <Property Type="DateTime" Name="lastUpdated" />
+          <Property Type="Int32" Name="numTextReviews" />
+          <Property Type="Int32" Name="numRatings" />
+          <Property Type="String" Name="ratingDist" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Review">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="bookId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Book" Relationship="GoodReadsCrawlerModel.FK_Review_Book" FromRole="Review" ToRole="Book" />
+          <Property Type="Int32" Name="foundOnPage" />
+          <Property Type="Int32" Name="maxPage" />
+          <Property Type="Int32" Name="userId" />
+          <Property Type="String" Name="userIdString" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="reviewContent" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="starRating" />
+          <Property Type="DateTime" Name="publishDate" />
+          <Property Type="String" Name="recommendedFor" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="numComments" />
+          <NavigationProperty Name="User" Relationship="GoodReadsCrawlerModel.FK_Review_User" FromRole="Review" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Review_Book">
+          <End Role="Book" Type="GoodReadsCrawlerModel.Book" Multiplicity="1" />
+          <End Role="Review" Type="GoodReadsCrawlerModel.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="bookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="userIdString" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="numRatings" />
+          <Property Type="Int32" Name="numReviews" />
+          <Property Type="Decimal" Name="avgRating" Precision="18" Scale="2" />
+          <NavigationProperty Name="Reviews" Relationship="GoodReadsCrawlerModel.FK_Review_User" FromRole="User" ToRole="Review" />
+          <Property Type="Int32" Name="numFriends" />
+          <Property Type="String" Name="gender" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="IsLibrarian" />
+          <Property Type="Boolean" Name="IsAuthor" />
+          <Property Type="String" Name="badge1" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="badge2" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="badge3" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="badge4" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="badge5" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="whenReviewsAdded" />
+          <Property Type="DateTime" Name="lastUpdated" />
+          <NavigationProperty Name="Friendships" Relationship="GoodReadsCrawlerModel.FK_Friendship_User" FromRole="User" ToRole="Friendship" />
+          <Property Type="Int32" Name="numGroups" />
+          <Property Type="Int32" Name="quizNumQuestions" />
+          <Property Type="Int32" Name="quizNumCorrect" />
+          <Property Type="Int32" Name="quizRank" />
+          <Property Type="Int32" Name="quizRankOutOf" />
+          <Property Type="Int32" Name="numFavouriteAuthors" />
+          <Property Type="Int32" Name="numFollowers" />
+          <Property Type="Int32" Name="numUserIsFollowing" />
+          <Property Type="Int32" Name="numShelves" />
+          <NavigationProperty Name="Activities" Relationship="GoodReadsCrawlerModel.FK_Activity_User" FromRole="User" ToRole="Activity" />
+          <NavigationProperty Name="Genres" Relationship="GoodReadsCrawlerModel.FK_Genre_User" FromRole="User" ToRole="Genre" />
+          <NavigationProperty Name="ReadingChallenges" Relationship="GoodReadsCrawlerModel.FK_ReadingChallenge_User" FromRole="User" ToRole="ReadingChallenge" />
+          <NavigationProperty Name="Groups" Relationship="GoodReadsCrawlerModel.GroupMember" FromRole="User" ToRole="Group" />
+          <NavigationProperty Name="Lists" Relationship="GoodReadsCrawlerModel.ListVote" FromRole="User" ToRole="List" />
+          <Property Type="String" Name="authorUrl" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="IsPrivate" />
+        </EntityType>
+        <Association Name="FK_Review_User">
+          <End Type="GoodReadsCrawlerModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="GoodReadsCrawlerModel.Review" Role="Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Book_Author">
+          <End Type="GoodReadsCrawlerModel.Author" Role="Author" Multiplicity="0..1" />
+          <End Type="GoodReadsCrawlerModel.Book" Role="Book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Author">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Book">
+              <PropertyRef Name="authorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Friendship">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="friendIdString" />
+          </Key>
+          <Property Type="Int32" Name="userId" Nullable="false" />
+          <Property Type="Int32" Name="friendNumBooks" />
+          <Property Type="Int32" Name="friendNumFriends" />
+          <NavigationProperty Name="User" Relationship="GoodReadsCrawlerModel.FK_Friendship_User" FromRole="Friendship" ToRole="User" />
+          <Property Type="String" Name="friendIdString" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="rel" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Friendship_User">
+          <End Type="GoodReadsCrawlerModel.User" Role="User" Multiplicity="1" />
+          <End Type="GoodReadsCrawlerModel.Friendship" Role="Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="retrievedAt" />
+          </Key>
+          <Property Type="Int32" Name="userId" Nullable="false" />
+          <Property Type="String" Name="activityHTML" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="GoodReadsCrawlerModel.FK_Activity_User" FromRole="Activity" ToRole="User" />
+          <Property Type="DateTime" Name="retrievedAt" Nullable="false" />
+          <Property Type="String" Name="activityTimestampString" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="name" />
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Type="String" Name="name" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="userId" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="GoodReadsCrawlerModel.FK_Genre_User" FromRole="Genre" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="userCount" />
+          <Property Type="String" Name="title" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="description" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="category" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="subcategory" MaxLength="256" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Users" Relationship="GoodReadsCrawlerModel.GroupMember" FromRole="Group" ToRole="User" />
+          <Property Type="String" Name="lastActivityAtString" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="List">
+          <Key>
+            <PropertyRef Name="title" />
+          </Key>
+          <Property Type="String" Name="title" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="numBooks" />
+          <Property Type="Int32" Name="numVoters" />
+          <NavigationProperty Name="Users" Relationship="GoodReadsCrawlerModel.ListVote" FromRole="List" ToRole="User" />
+        </EntityType>
+        <EntityType Name="ReadingChallenge">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="challenge" />
+          </Key>
+          <Property Type="Int32" Name="userId" Nullable="false" />
+          <Property Type="String" Name="challenge" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="numBooksTarget" />
+          <Property Type="Int32" Name="numBooksRead" />
+          <Property Type="Decimal" Name="Percentage" Precision="5" Scale="2" />
+          <Property Type="DateTime" Name="lastUpdated" />
+          <NavigationProperty Name="User" Relationship="GoodReadsCrawlerModel.FK_ReadingChallenge_User" FromRole="ReadingChallenge" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Activity_User">
+          <End Type="GoodReadsCrawlerModel.User" Role="User" Multiplicity="1" />
+          <End Type="GoodReadsCrawlerModel.Activity" Role="Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Genre_User">
+          <End Type="GoodReadsCrawlerModel.User" Role="User" Multiplicity="1" />
+          <End Type="GoodReadsCrawlerModel.Genre" Role="Genre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Genre">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReadingChallenge_User">
+          <End Type="GoodReadsCrawlerModel.User" Role="User" Multiplicity="1" />
+          <End Type="GoodReadsCrawlerModel.ReadingChallenge" Role="ReadingChallenge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReadingChallenge">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GroupMember">
+          <End Type="GoodReadsCrawlerModel.Group" Role="Group" Multiplicity="*" />
+          <End Type="GoodReadsCrawlerModel.User" Role="User" Multiplicity="*" />
+        </Association>
+        <Association Name="ListVote">
+          <End Type="GoodReadsCrawlerModel.List" Role="List" Multiplicity="*" />
+          <End Type="GoodReadsCrawlerModel.User" Role="User" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GoodReadsCrawlerModelStoreContainer" CdmEntityContainer="GoodReadsCrawlerEntities">
+          <EntitySetMapping Name="Authors"><EntityTypeMapping TypeName="GoodReadsCrawlerModel.Author"><MappingFragment StoreEntitySet="Author">
+            <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="name" ColumnName="name" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Books"><EntityTypeMapping TypeName="GoodReadsCrawlerModel.Book"><MappingFragment StoreEntitySet="Book">
+                <ScalarProperty Name="ratingDist" ColumnName="ratingDist" />
+                <ScalarProperty Name="numRatings" ColumnName="numRatings" />
+                <ScalarProperty Name="numTextReviews" ColumnName="numTextReviews" />
+                <ScalarProperty Name="lastUpdated" ColumnName="lastUpdated" />
+                <ScalarProperty Name="avgRating" ColumnName="avgRating" />
+                <ScalarProperty Name="authorId" ColumnName="authorId" />
+                <ScalarProperty Name="isbn" ColumnName="isbn" />
+                <ScalarProperty Name="isProcessed" ColumnName="isProcessed" />
+                <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="title" ColumnName="title" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Reviews"><EntityTypeMapping TypeName="GoodReadsCrawlerModel.Review"><MappingFragment StoreEntitySet="Review">
+            <ScalarProperty Name="numComments" ColumnName="numComments" />
+                <ScalarProperty Name="recommendedFor" ColumnName="recommendedFor" />
+                <ScalarProperty Name="publishDate" ColumnName="publishDate" />
+                <ScalarProperty Name="starRating" ColumnName="starRating" />
+                <ScalarProperty Name="reviewContent" ColumnName="reviewContent" />
+                <ScalarProperty Name="userIdString" ColumnName="userIdString" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="maxPage" ColumnName="maxPage" />
+                <ScalarProperty Name="foundOnPage" ColumnName="foundOnPage" />
+                <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="bookId" ColumnName="bookId" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="GoodReadsCrawlerModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="IsPrivate" ColumnName="IsPrivate" />
+                <ScalarProperty Name="authorUrl" ColumnName="authorUrl" />
+                <ScalarProperty Name="numShelves" ColumnName="numShelves" />
+                <ScalarProperty Name="numUserIsFollowing" ColumnName="numUserIsFollowing" />
+                <ScalarProperty Name="numFollowers" ColumnName="numFollowers" />
+                <ScalarProperty Name="numFavouriteAuthors" ColumnName="numFavouriteAuthors" />
+                <ScalarProperty Name="quizRankOutOf" ColumnName="quizRankOutOf" />
+                <ScalarProperty Name="quizRank" ColumnName="quizRank" />
+                <ScalarProperty Name="quizNumCorrect" ColumnName="quizNumCorrect" />
+                <ScalarProperty Name="quizNumQuestions" ColumnName="quizNumQuestions" />
+                <ScalarProperty Name="numGroups" ColumnName="numGroups" />
+                <ScalarProperty Name="lastUpdated" ColumnName="lastUpdated" />
+                <ScalarProperty Name="whenReviewsAdded" ColumnName="whenReviewsAdded" />
+                <ScalarProperty Name="badge5" ColumnName="badge5" />
+                <ScalarProperty Name="badge4" ColumnName="badge4" />
+                <ScalarProperty Name="badge3" ColumnName="badge3" />
+                <ScalarProperty Name="badge2" ColumnName="badge2" />
+                <ScalarProperty Name="badge1" ColumnName="badge1" />
+                <ScalarProperty Name="IsAuthor" ColumnName="IsAuthor" />
+                <ScalarProperty Name="IsLibrarian" ColumnName="IsLibrarian" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="numFriends" ColumnName="numFriends" />
+                <ScalarProperty Name="avgRating" ColumnName="avgRating" />
+                <ScalarProperty Name="numReviews" ColumnName="numReviews" />
+                <ScalarProperty Name="numRatings" ColumnName="numRatings" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="userIdString" ColumnName="userIdString" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Friendships">
+            <EntityTypeMapping TypeName="GoodReadsCrawlerModel.Friendship">
+              <MappingFragment StoreEntitySet="Friendship">
+                <ScalarProperty Name="rel" ColumnName="rel" />
+                <ScalarProperty Name="friendIdString" ColumnName="friendIdString" />
+                <ScalarProperty Name="friendNumFriends" ColumnName="friendNumFriends" />
+                <ScalarProperty Name="friendNumBooks" ColumnName="friendNumBooks" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Activities">
+            <EntityTypeMapping TypeName="GoodReadsCrawlerModel.Activity">
+              <MappingFragment StoreEntitySet="Activity">
+                <ScalarProperty Name="activityTimestampString" ColumnName="activityTimestampString" />
+                <ScalarProperty Name="retrievedAt" ColumnName="retrievedAt" />
+                <ScalarProperty Name="activityHTML" ColumnName="activityHTML" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genres">
+            <EntityTypeMapping TypeName="GoodReadsCrawlerModel.Genre">
+              <MappingFragment StoreEntitySet="Genre">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Groups">
+            <EntityTypeMapping TypeName="GoodReadsCrawlerModel.Group">
+              <MappingFragment StoreEntitySet="Group">
+                <ScalarProperty Name="lastActivityAtString" ColumnName="lastActivityAtString" />
+                <ScalarProperty Name="subcategory" ColumnName="subcategory" />
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="userCount" ColumnName="userCount" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lists">
+            <EntityTypeMapping TypeName="GoodReadsCrawlerModel.List">
+              <MappingFragment StoreEntitySet="List">
+                <ScalarProperty Name="numVoters" ColumnName="numVoters" />
+                <ScalarProperty Name="numBooks" ColumnName="numBooks" />
+                <ScalarProperty Name="title" ColumnName="title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReadingChallenges">
+            <EntityTypeMapping TypeName="GoodReadsCrawlerModel.ReadingChallenge">
+              <MappingFragment StoreEntitySet="ReadingChallenge">
+                <ScalarProperty Name="lastUpdated" ColumnName="lastUpdated" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="numBooksRead" ColumnName="numBooksRead" />
+                <ScalarProperty Name="numBooksTarget" ColumnName="numBooksTarget" />
+                <ScalarProperty Name="challenge" ColumnName="challenge" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="GroupMember" TypeName="GoodReadsCrawlerModel.GroupMember" StoreEntitySet="GroupMember">
+            <EndProperty Name="User">
+              <ScalarProperty Name="id" ColumnName="userId" />
+            </EndProperty>
+            <EndProperty Name="Group">
+              <ScalarProperty Name="id" ColumnName="groupId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="ListVote" TypeName="GoodReadsCrawlerModel.ListVote" StoreEntitySet="ListVote">
+            <EndProperty Name="User">
+              <ScalarProperty Name="id" ColumnName="userId" />
+            </EndProperty>
+            <EndProperty Name="List">
+              <ScalarProperty Name="title" ColumnName="title" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="GoodReadsModel">
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.Author" Width="1.5" PointX="3.375" PointY="0.75" Height="1.59568359375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.Book" Width="1.5" PointX="0.75" PointY="2.125" Height="2.9070849609374987" IsExpanded="true" />
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.Review" Width="1.5" PointX="3.625" PointY="3.375" Height="3.0714322916666656" IsExpanded="true" />
+        <AssociationConnector Association="GoodReadsCrawlerModel.FK_Review_Book" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="4.20354248046875" />
+          <ConnectorPoint PointX="3.625" PointY="4.20354248046875" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.User" Width="1.5" PointX="5.625" PointY="0.625" Height="2.0853483072916656" />
+        <AssociationConnector Association="GoodReadsCrawlerModel.FK_Review_User" >
+          <ConnectorPoint PointX="5.625" PointY="4.9107161458333328" />
+          <ConnectorPoint PointX="5.125" PointY="4.9107161458333328" />
+        </AssociationConnector>
+        <AssociationConnector Association="GoodReadsCrawlerModel.FK_Book_Author" >
+          <ConnectorPoint PointX="3.375" PointY="1.4374995" />
+          <ConnectorPoint PointX="1.5" PointY="1.4374995" />
+          <ConnectorPoint PointX="1.5" PointY="2.125" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.Friendship" Width="1.5" PointX="7.875" PointY="1.75" Height="1.9210009765625" />
+        <AssociationConnector Association="GoodReadsCrawlerModel.FK_Friendship_User" >
+          <ConnectorPoint PointX="7.125" PointY="2.71050048828125" />
+          <ConnectorPoint PointX="7.875" PointY="2.71050048828125" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.Activity" Width="1.5" PointX="7.875" PointY="6.5" Height="1.7566536458333335" />
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.Genre" Width="1.5" PointX="7.875" PointY="8.875" Height="1.4279589843749996" />
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.Group" Width="1.5" PointX="3.375" PointY="7.5" Height="2.2496956380208317" />
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.List" Width="1.5" PointX="3.375" PointY="11.5" Height="1.5923063151041674" />
+        <EntityTypeShape EntityType="GoodReadsCrawlerModel.ReadingChallenge" Width="1.5" PointX="7.875" PointY="11" Height="2.0853483072916674" />
+        <AssociationConnector Association="GoodReadsCrawlerModel.FK_Activity_User" >
+          <ConnectorPoint PointX="7.125" PointY="6.741689453125" />
+          <ConnectorPoint PointX="7.875" PointY="6.741689453125" />
+        </AssociationConnector>
+        <AssociationConnector Association="GoodReadsCrawlerModel.FK_Genre_User" >
+          <ConnectorPoint PointX="6.375" PointY="6.98337890625" />
+          <ConnectorPoint PointX="6.375" PointY="9.5889794921875" />
+          <ConnectorPoint PointX="6.6979191666666669" PointY="9.5889794921875" />
+          <ConnectorPoint PointX="6.8645858333333329" PointY="9.5889794921875" />
+          <ConnectorPoint PointX="7.875" PointY="9.5889794921875" />
+        </AssociationConnector>
+        <AssociationConnector Association="GoodReadsCrawlerModel.FK_ReadingChallenge_User" >
+          <ConnectorPoint PointX="6.7812525" PointY="6.98337890625" />
+          <ConnectorPoint PointX="6.7812525" PointY="12.042674153645834" />
+          <ConnectorPoint PointX="7.875" PointY="12.042674153645834" />
+        </AssociationConnector>
+        <AssociationConnector Association="GoodReadsCrawlerModel.GroupMember" >
+          <ConnectorPoint PointX="4.875" PointY="8.544489746093749" />
+          <ConnectorPoint PointX="5.7174432291666673" PointY="8.544489746093749" />
+          <ConnectorPoint PointX="5.8841098958333333" PointY="8.544489746093749" />
+          <ConnectorPoint PointX="6.0878882812500006" PointY="8.544489746093749" />
+          <ConnectorPoint PointX="6.0878882812500006" PointY="6.98337890625" />
+        </AssociationConnector>
+        <AssociationConnector Association="GoodReadsCrawlerModel.ListVote" >
+          <ConnectorPoint PointX="4.875" PointY="12.438025716145834" />
+          <ConnectorPoint PointX="5.8007765625" PointY="12.438025716145834" />
+          <ConnectorPoint PointX="5.8007765625" PointY="6.98337890625" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
